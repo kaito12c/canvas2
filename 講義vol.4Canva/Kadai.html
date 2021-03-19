@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>お絵かき練習アプリ！</title>
+</head>
+
+<body>
+    <section>
+        <h1>お絵かき練習アプリ！</h1>
+        <nav>
+            
+            <!-- 線の色を変更するHTML要素 -->
+            <input type="color" name="color" id="change_color">
+            <!-- 線の太さを変更するHTML要素 -->
+            <input type="range" name="range" id="range" min="0.5" max="50" value="5">
+
+
+            <button id="clear_btn">Clear</button>
+        </nav>
+        <canvas id="drowarea" width="500" height="500" style="border:1px solid blue;"></canvas>
+    </section>
+
+
+    <script src="js/jquery-2.1.3.min.js"></script>
+    <script>
+        //初期化(変数letで宣言)
+        let canvas_mouse_event = false; //スイッチ [ true=線を引く, false=線は引かない ]  ＊＊＊
+        let oldX = 0; //１つ前の座標を代入するための変数
+        let oldY = 0; //１つ前の座標を代入するための変数
+        let bold_line = 0; //ラインの太さをここで指定 数値によって太さを変えられる
+        let color = "#ff0000"; //ラインの色をここで指定
+
+        //------------------------------------------------
+        //const can = $("#drowarea")[0]; //CanvasElement
+        //const ctx = can.getContext("2d"); //描画するための準備！
+        //------------------------------------------------
+        //上2つのスクリプトを記述します。
+        const can = $("#drowarea")[0];
+        const ctx = can.getContext("2d");
+
+        //mousedown：フラグをTrue
+        //-----------------------------------------------
+        //oldX = e.offsetX;       //MOUSEDOWNしたX横座標取得
+        //oldY = e.offsetY; //MOUSEDOWN Y高さ座標取得
+        //canvas_mouse_event=true;
+        //-----------------------------------------------
+        //上5つのスクリプトを記述します。
+        $(can).on("mousedown", function(e){
+            // function(e)のeは何か行動した場合（この場合だとクリック）した時にと言う意味
+            // 以下の２つでクリックした位置（座標）を取る。
+            oldY = e.offsetY;
+            oldX = e.offsetX;
+            canvas_mouse_event = true;
+        });
+
+        //mousemove：フラグがTrueだったら描く ※e：イベント引数取得
+        //----------------------------------------------
+        //  if(canvas_mouse_event==true){
+        //      const px = e.offsetX;
+        //      const py = e.offsetY;
+        //      ctx.strokeStyle = color;
+        //      ctx.lineWidth = bold_line;
+        //      ctx.beginPath();
+        //      ctx.lineJoin= "round";
+        //      ctx.lineCap = "round";
+        //      ctx.moveTo(oldX, oldY);
+        //      ctx.lineTo(px, py);
+        //      ctx.stroke();
+        //      oldX = px;
+        //      oldY = py;
+        //  }
+        $(can).on("mousemove", function(e){
+            if(canvas_mouse_event==true){
+                const px = e.offsetX;
+                const py = e.offsetY;
+                ctx.strokeStyle=color;
+                ctx.lineWidth = bold_line;
+                ctx.beginPath();
+                ctx.lineJoin= "round";
+                ctx.lineCap = "round";
+                ctx.moveTo(oldX,oldY);
+                ctx.lineTo(px,py);
+                ctx.stroke();
+                oldX = px;
+                oldY = py;
+            }
+        });
+
+        //mouseup：フラグをfalse
+        //------------------------------------------------
+        //    canvas_mouse_event=false;
+        //------------------------------------------------
+        $(document).on("mouseup", function(e){
+            canvas_mouse_event = false;
+        });
+
+        // // canvas要素からmouseが外に出たら、線を書かないようにする mouseout
+        // $(can).on("mouseout", function(e){
+        //     canvas_mouse_event = false;
+        // });
+
+        // 線の色を変える 
+        $("#change_color").on("change",function(){
+            color = $(this).val();
+        });
+
+        //線の幅を変える 
+        $("#range").on("change",function(){
+            bold_line = $(this).val();
+        });
+
+        //#clear_btn：クリアーボタンAction
+        //-----------------------------------------------------------------
+        //    ctx.beginPath();
+        //    ctx.clearRect(0, 0, can.width, can.height);
+        //-----------------------------------------------------------------
+        $("#clear_btn").on("click", function(){
+            // 初期化
+            ctx.beginPath();
+            ctx.clearRect(0, 0, can.width, can.height);
+        })
+
+
+
+    </script>
+</body>
+
+</html>

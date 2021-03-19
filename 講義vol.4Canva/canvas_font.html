@@ -1,0 +1,31 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>文字</title>
+  </head>
+  <body>
+    <canvas id="canvas" width="500" height="300">
+
+    </canvas>
+    <canvas id="canvas" width="500" height="300"></canvas>
+    <script src="js/jquery-2.1.3.min.js"></script>
+    <script>
+      // javascriptでcanvasの要素を指定する
+      let canvas = document.getElementById("canvas");
+      // let canvas2 = $("#canvas")[0];
+      // canvasの２Dレンダリングコンテキストを取得する（おまじない）
+      const ctx = canvas.getContext("2d");
+
+      // 実際に描画を行う
+      // 文字の色を設定
+      ctx.fillStyle = "#ff0000";
+      // font指定
+      ctx.font = "48px serif";
+      // テキストのベースライン
+      ctx.textBaseLine = "top";
+      // テキスト書き込む 
+      ctx.fillText("Hello World", 100, 80);
+    </script>
+  </body>
+</html>
